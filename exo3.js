@@ -6,7 +6,7 @@ list_of_names = [
     "George le ",
     "Adam le",
     "Chloé la",
-    "Géraldin le",
+    "Gabin le",
     "Huguette la",
     "René le"
 ]
@@ -60,9 +60,6 @@ survivant_list.forEach(element => {
     console.log(element)
 });
 
-//console.log(".")
-//console.log(survivant_list[0].damage)
-
 let death_list = []
 
 
@@ -77,66 +74,24 @@ function game(survivors) {
 
         random_survivor = Math.floor(Math.random()*survivors.length)
 
-        let min_stat = survivors[random_survivor].death
-        let max_stat = survivors[random_survivor].death
-        //let mid_stat = survivors[random_survivor].death
-
-        for (const key in survivors[random_survivor]) {
-
-            if (survivors[random_survivor][key] % 1 !== 0) {
-
-                if (survivors[random_survivor][key] < min_stat) {
-                    min_stat = survivors[random_survivor][key];
-                }
-
-                if (survivors[random_survivor][key] > max_stat) {
-                    max_stat = survivors[random_survivor][key];
-                }
-            }
-        }
-
-        
-
-        //console.log("Le survivant actuel : " + survivors[random_survivor].name)
-        //console.log("Stat 1 : " + survivors[random_survivor].death)
-        //console.log("Stat 2 : " + survivors[random_survivor].damage)
-        //console.log("Stat 3 : " + survivors[random_survivor].dying_and_damage)
-        //console.log("La plus petite valeur : " + min_stat)
-        //console.log("La plus grande valeur : " + max_stat)
-
-        function action(stat, survivors, actual_survivor, jason_life, death_list) {
-            switch (true) {
-                case stat == survivors[actual_survivor].death :
-                    console.log("Jason a tué " + survivors[actual_survivor].name + " !")
-                    death_list.push(survivors[actual_survivor].name)
-                    survivors.splice(survivors[actual_survivor], 1)
-                    break;
-            
-                case stat == survivors[actual_survivor].damage :
-                    console.log("Jason a été blessé !")
-                    jason_life -= 10
-                    break
-                
-                default:
-                    console.log("Jason a tué " + survivors[actual_survivor].name + " mais s'est quand même fait touché !")
-                    jason_life -= 15
-                    death_list.push(survivors[actual_survivor].name)
-                    survivors.splice(survivors[actual_survivor], 1)
-                    break;
-            }
-        }
 
         switch (true) {
-            case luck < min_stat:
-                action(min_stat, survivors, random_survivor, jason_life, death_list)
+            case luck < survivors[random_survivor].death:
+                console.log("Jason a tué " + survivors[random_survivor].name + " !")
+                death_list.push(survivors[random_survivor].name)
+                survivors.splice(random_survivor, 1)
                 break;
 
-            case luck > max_stat:
-                action(max_stat, survivors, random_survivor, jason_life, death_list)
+            case luck > 1 - survivors[random_survivor].dying_and_damage:
+                console.log("Jason a tué " + survivors[random_survivor].name + " mais s'est quand même fait touché !")
+                jason_life -= 15
+                death_list.push(survivors[random_survivor].name)
+                survivors.splice(random_survivor, 1)
                 break;
         
             default:
-                action(0.0, survivors, random_survivor, jason_life, death_list)
+                console.log("Jason a été blessé !")
+                jason_life -= 10
                 break;
         }
     }
@@ -145,7 +100,7 @@ function game(survivors) {
         console.log("Jason est mort ! Les survivants ont gagné !")
     }
     else {
-        console.log("Jasons a gagné")
+        console.log("Jason a gagné")
     }
 
     console.log("RIP à " + death_list)
